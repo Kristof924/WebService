@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Film Űrlap</title>
+</head>
+<body>
+<h1>Film hozzáadása</h1>
+
+<form th:action="saveFilm" th:method="post" enctype="multipart/form-data" th:object="${filmForm}">
+    <label for="title">Cím:</label>
+    <input type="text" id="title" th:field="*{title}" required><br><br>
+
+    <label for="file">Kép:</label>
+    <input type="file" name="file" id="file" accept="image/*"><br><br>
+
+    <label for="description">Leírás:</label><br>
+    <textarea id="description" th:field="*{description}" rows="4" cols="50" required></textarea><br><br>
+
+    <label for="director">Rendező:</label>
+    <input type="text" id="director" th:field="*{director}" required><br><br>
+
+    <button type="submit">Mentés</button>
+    <a class="nav-link" href="/">Mégse</a>
+</form>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Kritikák</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Fejléc stílus */
+        .navbar-custom {
+            background-color: #343a40; /* Sötét háttérszín */
+        }
+
+        .navbar-custom .navbar-brand {
+            color: #ffffff; /* Fehér szöveg */
+            font-weight: bold;
+        }
+
+        .navbar-custom .nav-link {
+            color: #ffffff; /* Fehér szöveg */
+        }
+
+        /* Keresőmező középre */
+        .search-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Keresőmező stílus */
+        .search-bar {
+            border-radius: 25px; /* Kerekített sarkok */
+        }
+
+        .search-button {
+            background-color: #007bff; /* Kék háttérszín a gombhoz */
+            color: #ffffff; /* Fehér szöveg */
+            border: none;
+            border-radius: 25px; /* Kerekített sarkok */
+        }
+
+        /* Törzs stílus */
+        .movie-details {
+            padding: 20px;
+        }
+
+        .movie-description {
+            margin-top: 20px;
+        }
+
+        /* Kép és szöveg elrendezés */
+        .movie-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .movie-info img {
+            max-width: 250px;
+            margin-right: 20px;
+        }
+
+        /* Százalékos értékelés stílusa */
+        .rating {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        /* Stílus a tartalom középre igazításához */
+        .comments-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        /* Stílus a kommentek megjelenítéséhez */
+        #comments-container {
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <a class="navbar-brand" href="/">RateMovie</a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a th:if="${isAdmin}" class="nav-link" href="/admin">Admin</a>
+            <a th:if="${isLogged}" class="nav-link" href="/login">Bejelentkezés</a>
+            <a th:if="${logout}" class="nav-link" href="/logout">Kijelentkezés</a>
+        </li>
+    </ul>
+    <div class="search-container">
+        <form class="form-inline my-2 my-lg-0" th:action="search" th:method="post" th:object="${MovieTitle}">
+            <input class="form-control mr-sm-2 search-bar" type="search" th:field="*{title}" placeholder="Keresés" aria-label="Keresés">
+            <button class="btn btn-outline-success my-2 my-sm-0 search-button" type="submit" >Keresés</button>
+        </form>
+    </div>
+</nav>
+
+<!-- Film részletek -->
+<div class="container my-5 movie-details">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="movie-info">
+                <img th:src="@{/{id}.jpg(id=${movies.id})}" alt="Film címe" class="img-fluid">
+                <div>
+                    <h2 th:text="${movies.title}">Title</h2>
+                    <p th:text="${movies.director}">Director</p>
+                    <p class="rating" th:text="${movies.story}">Story</p>
+                    <p class="rating" th:text="${movies.characters}">Characters</p>
+                    <p class="rating" th:text="${movies.actors}">Actors</p>
+                    <p class="rating" th:text="${movies.visual}">Visual Effects</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-12 mt-4">
+            <h3>Description</h3>
+            <p th:text="${movies.description}">Ez egy hosszabb leírás a filmről, amely itt jelenik meg a kép és a filmbemutató alatt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id mi nec eros eleifend vulputate vel non justo. In consectetur sapien quis nisi blandit fringilla. Sed semper in odio vel iaculis.</p>
+        </div>
+    </div>
+</div>
+
+<div id="comments-container">
+    <!-- Korábbi kommentek megjelenítése -->
+    <div class="mb-4">
+        <h2>Comments:</h2>
+        <ul class="list-group">
+            <li th:each="comment : ${ShowComments}" class="list-group-item">
+                <span th:text="${comment.username}"></span>: <span th:text="${comment.comment}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Komment beküldési űrlap -->
+    <form th:action="comment" th:if="${isLogg}" th:method="post" th:object="${Comment}">
+        <div class="form-group">
+            <textarea name="commentText"  class="form-control" placeholder="Write a comment..."></textarea>
+        </div>
+        <input type="hidden" th:field="*{comment}" name="Comment"/>
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
+    </form>
+</div>
+<!-- Add Bootstrap JS and jQuery scripts here -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Kritikák</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Fejléc stílus */
+        .navbar-custom {
+            background-color: #343a40; /* Sötét háttérszín */
+        }
+
+        .navbar-custom .navbar-brand {
+            color: #ffffff; /* Fehér szöveg */
+            font-weight: bold;
+        }
+
+        .navbar-custom .nav-link {
+            color: #ffffff; /* Fehér szöveg */
+        }
+
+        /* Keresőmező középre */
+        .search-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Keresőmező stílus */
+        .search-bar {
+            border-radius: 25px; /* Kerekített sarkok */
+        }
+
+        .search-button {
+            background-color: #007bff; /* Kék háttérszín a gombhoz */
+            color: #ffffff; /* Fehér szöveg */
+            border: none;
+            border-radius: 25px; /* Kerekített sarkok */
+        }
+
+        /* Törzs stílus */
+        .movie-details {
+            padding: 20px;
+        }
+
+        .movie-description {
+            margin-top: 20px;
+        }
+
+        /* Kép és szöveg elrendezés */
+        .movie-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .movie-info img {
+            max-width: 250px;
+            margin-right: 20px;
+        }
+
+        /* Százalékos értékelés stílusa */
+        .rating {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .movie-list {
+            padding: 20px;
+        }
+
+        .movie {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .movie img {
+            max-width: 150px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <a class="navbar-brand" href="/">RateMovie</a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a th:if="${isAdmin}" class="nav-link" href="/admin">Admin</a>
+            <a th:if="${isLogged}" class="nav-link" href="/login">Bejelentkezés</a>
+            <a th:if="${logout}" class="nav-link" href="/logout">Kijelentkezés</a>
+        </li>
+    </ul>
+    <div class="search-container">
+        <form class="form-inline my-2 my-lg-0" th:action="search" th:method="post" th:object="${MovieTitle}">
+            <input class="form-control mr-sm-2 search-bar" type="search" th:field="*{title}" placeholder="Keresés" aria-label="Keresés">
+            <button class="btn btn-outline-success my-2 my-sm-0 search-button" type="submit" >Keresés</button>
+        </form>
+    </div>
+</nav>
+
+<!-- Film részletek -->
+<div class="container my-5 movie-list">
+    <div class="movie" th:each="m : ${movies}">
+        <img th:src="@{/{id}.jpg(id=${m.id})}" alt="Film címe">
+        <div>
+            <h3><a th:text="${m.title}" th:href="@{/movie/{id}(id=${m.id})}" >Film Címe</a></h3>
+            <p th:text="${m.director}">Rendező: Steven Spielberg</p>
+        </div>
+    </div>
+    <!-- Egyéb filmek itt -->
+</div>
+
+<!-- Add Bootstrap JS and jQuery scripts here -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
